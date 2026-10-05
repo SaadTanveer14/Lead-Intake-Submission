@@ -7,7 +7,7 @@ A BuildShip workflow (`lead-intake`) that receives contact-form submissions, val
 | Deliverable | Link |
 |-------------|------|
 | Workflow canvas screenshot | [assets/workflow-canvas.png](assets/workflow-canvas.png) (shown below) |
-| Shared BuildShip workflow | [ADD SHARED BUILDSHIP WORKFLOW LINK] |
+| Shared BuildShip workflow (remix) | [Open in BuildShip](https://app.buildship.com/remix/537ecc6f-baea-4b29-9f4d-7e9f0e8a9804) |
 | Google Sheet (8+ test leads) | [Leads sheet](https://docs.google.com/spreadsheets/d/1GiriQc99kEuui99oZ7xXmomdQhwumZtoyNgF8J3XWPM/edit?gid=0#gid=0) |
 | Demo recording (3–5 min, incl. hot-lead alert) | [Demo video](https://drive.google.com/file/d/12yVtt9KG954k7BySYE4-gGRNRklHAjhP/view?usp=drive_link) |
 | curl commands for every test case | [tests/curl-commands.md](tests/curl-commands.md) |
