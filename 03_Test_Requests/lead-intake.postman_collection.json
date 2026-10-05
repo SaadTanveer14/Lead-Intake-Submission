@@ -1,0 +1,543 @@
+{
+  "info": {
+    "name": "Smart Lead Intake API",
+    "description": "Test cases for the BuildShip lead-intake workflow. For the AI-failure case, point Classify Lead's API key at a wrong value and re-run case 2 (expect priority 'unscored').",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://3zhkbl.buildship.run"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Clear buying intent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Sara Ahmed\",\n  \"email\": \"sara@acme.com\",\n  \"company\": \"Acme Ltd\",\n  \"message\": \"We need a chatbot for our store, budget ready, want to start this month.\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, priority hot, Slack + email alert, row saved"
+      }
+    },
+    {
+      "name": "2. General question, no budget or timeline",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ali Khan\",\n  \"email\": \"ali@example.com\",\n  \"company\": \"\",\n  \"message\": \"Hi, just curious what kind of services you offer?\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, priority warm or cold, row saved, no alert"
+      }
+    },
+    {
+      "name": "3a. Missing email",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('success is false', () => pm.expect(pm.response.json().success).to.eql(false));",
+              "pm.test('errors listed', () => pm.expect(pm.response.json().errors).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bob Smith\",\n  \"company\": \"X Corp\",\n  \"message\": \"We would like a new website for our firm.\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 400, errors: [\"email is required\"], nothing saved"
+      }
+    },
+    {
+      "name": "3b. Invalid email format",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('success is false', () => pm.expect(pm.response.json().success).to.eql(false));",
+              "pm.test('errors listed', () => pm.expect(pm.response.json().errors).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bob Smith\",\n  \"email\": \"bob@\",\n  \"company\": \"X Corp\",\n  \"message\": \"We would like a new website for our firm.\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 400, errors: [\"email is not valid\"], nothing saved"
+      }
+    },
+    {
+      "name": "4. Message shorter than 10 characters",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('success is false', () => pm.expect(pm.response.json().success).to.eql(false));",
+              "pm.test('errors listed', () => pm.expect(pm.response.json().errors).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bob Smith\",\n  \"email\": \"bob@xcorp.com\",\n  \"company\": \"X Corp\",\n  \"message\": \"hi\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 400, errors: [\"message must be at least 10 characters\"], nothing saved"
+      }
+    },
+    {
+      "name": "4b. Several problems at once",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('success is false', () => pm.expect(pm.response.json().success).to.eql(false));",
+              "pm.test('errors listed', () => pm.expect(pm.response.json().errors).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"B\",\n  \"email\": \"not-an-email\",\n  \"message\": \"short\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 400, three errors listed"
+      }
+    },
+    {
+      "name": "6. Website redesign, no timeline",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Hina Raza\",\n  \"email\": \"hina@bloomflorist.pk\",\n  \"company\": \"Bloom Florist\",\n  \"message\": \"Our website looks outdated and we would like a redesign with online ordering. Can you share your process?\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely warm, web-development"
+      }
+    },
+    {
+      "name": "7. Mobile app with deadline and budget",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Usman Tariq\",\n  \"email\": \"usman@fitlife.io\",\n  \"company\": \"FitLife\",\n  \"message\": \"We have a 15k USD budget for an iOS and Android fitness app and need an MVP before December. Can we book a call this week?\",\n  \"source\": \"referral\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely hot, mobile-app"
+      }
+    },
+    {
+      "name": "8. Job application",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ayesha Noor\",\n  \"email\": \"ayesha.noor@gmail.com\",\n  \"company\": \"\",\n  \"message\": \"Hello, I am a junior React developer and would love to apply for an internship at your studio.\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely cold, other"
+      }
+    },
+    {
+      "name": "9. Automation interest",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Daniel Brooks\",\n  \"email\": \"daniel@ledgerly.co\",\n  \"company\": \"Ledgerly\",\n  \"message\": \"We spend hours copying invoices into spreadsheets. Is this something you could automate for us?\",\n  \"source\": \"linkedin\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely warm, automation"
+      }
+    },
+    {
+      "name": "10. SEO sales pitch / spam",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mark Lee\",\n  \"email\": \"mark@seoboost.biz\",\n  \"company\": \"SEO Boost\",\n  \"message\": \"We can get your website to page one of Google in 30 days. Reply for our special offer!\",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely cold, other"
+      }
+    },
+    {
+      "name": "11. UI/UX audit, urgent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('success is true', () => pm.expect(pm.response.json().success).to.eql(true));",
+              "pm.test('has leadId and priority', () => { const j = pm.response.json(); pm.expect(j.leadId).to.match(/^L-\\d+$/); pm.expect(['hot','warm','cold','unscored']).to.include(j.priority); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Fatima Sheikh\",\n  \"email\": \"FATIMA@Payzen.com \",\n  \"company\": \" PayZen \",\n  \"message\": \"  Our checkout conversion dropped. We have budget approved for a UX audit and redesign and want to start ASAP.  \",\n  \"source\": \"website-contact-form\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/leadIntake",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "leadIntake"
+          ]
+        },
+        "description": "Expected: 200, likely hot, ui-ux-design"
+      }
+    }
+  ]
+}
