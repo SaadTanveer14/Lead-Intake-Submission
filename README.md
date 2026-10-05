@@ -4,17 +4,17 @@ A BuildShip workflow (`lead-intake`) that receives contact-form submissions, val
 
 ## Submission
 
-| Deliverable | Link / file |
-|-------------|-------------|
-| Workflow canvas screenshots | `01_Workflow/screenshots/` _(add after capturing)_ |
-| Shared workflow link | `[ADD SHARED BUILDSHIP WORKFLOW LINK]` (editor: https://app.buildship.com/p/buildship-3zhkbl/flow/d89R4M7X11a4Oh6g2OsF) |
-| Google Sheet (8+ test leads, view access for mentor) | https://docs.google.com/spreadsheets/d/1GiriQc99kEuui99oZ7xXmomdQhwumZtoyNgF8J3XWPM/edit?gid=0#gid=0 |
-| curl commands for every test case | `03_Test_Requests/curl-commands.md` |
-| Postman collection | `03_Test_Requests/lead-intake.postman_collection.json` |
-| README | this file |
-| Demo recording (3–5 min, incl. one hot-lead alert) | https://drive.google.com/file/d/12yVtt9KG954k7BySYE4-gGRNRklHAjhP/view?usp=drive_link |
+| Deliverable | Link |
+|-------------|------|
+| Workflow canvas screenshot | [assets/workflow-canvas.png](assets/workflow-canvas.png) (shown below) |
+| Shared BuildShip workflow | [ADD SHARED BUILDSHIP WORKFLOW LINK] |
+| Google Sheet (8+ test leads) | [Leads sheet](https://docs.google.com/spreadsheets/d/1GiriQc99kEuui99oZ7xXmomdQhwumZtoyNgF8J3XWPM/edit?gid=0#gid=0) |
+| Demo recording (3–5 min, incl. hot-lead alert) | [Demo video](https://drive.google.com/file/d/12yVtt9KG954k7BySYE4-gGRNRklHAjhP/view?usp=drive_link) |
+| curl commands for every test case | [tests/curl-commands.md](tests/curl-commands.md) |
+| Postman collection | [tests/lead-intake.postman_collection.json](tests/lead-intake.postman_collection.json) |
+| Task brief | [docs/Devowise_BuildShip_Intern_Task.pdf](docs/Devowise_BuildShip_Intern_Task.pdf) |
 
-![Workflow canvas](01_Workflow/screenshots/workflow-canvas-1.png)
+![BuildShip workflow canvas](assets/workflow-canvas.png)
 
 ## Endpoint
 
@@ -94,11 +94,11 @@ Validation runs before the AI call (no AI requests spent on bad data), and the r
 3. **Google Sheet** – create a sheet with the 10 headers above in `Sheet1`; paste its URL into the **Add Row** node.
 4. **Google auth** – click the fingerprint icon on **Add Row** and **Send Email** and connect a Google account that can edit the sheet and has **Gmail send** permission.
 5. **Alert recipient** – set in the **Send Email** node (currently `saad.tanveer11400@gmail.com`).
-6. Click **Ship Changes** to deploy, then run the commands in `03_Test_Requests/curl-commands.md` or import the Postman collection.
+6. Click **Ship Changes** to deploy, then run the commands in `tests/curl-commands.md` or import the Postman collection.
 
 ## Testing
 
-`03_Test_Requests/curl-commands.md` and the Postman collection cover every case in the brief:
+`tests/curl-commands.md` and the Postman collection cover every case in the brief:
 
 | Test | Expected |
 |------|----------|
