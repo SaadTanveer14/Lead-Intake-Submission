@@ -8,11 +8,11 @@ A BuildShip workflow (`lead-intake`) that receives contact-form submissions, val
 |-------------|-------------|
 | Workflow canvas screenshots | `01_Workflow/screenshots/` _(add after capturing)_ |
 | Shared workflow link | `[ADD SHARED BUILDSHIP WORKFLOW LINK]` (editor: https://app.buildship.com/p/buildship-3zhkbl/flow/d89R4M7X11a4Oh6g2OsF) |
-| Google Sheet (8+ test leads, view access for mentor) | https://docs.google.com/spreadsheets/d/1GiriQc99kEuui99oZ7xXmomdQhwumZtoyNgF8J3XWPM/edit |
+| Google Sheet (8+ test leads, view access for mentor) | https://docs.google.com/spreadsheets/d/1GiriQc99kEuui99oZ7xXmomdQhwumZtoyNgF8J3XWPM/edit?gid=0#gid=0 |
 | curl commands for every test case | `03_Test_Requests/curl-commands.md` |
 | Postman collection | `03_Test_Requests/lead-intake.postman_collection.json` |
 | README | this file |
-| Demo recording (3–5 min, incl. one hot-lead alert) | `[ADD DEMO VIDEO LINK – Loom / Google Drive]` |
+| Demo recording (3–5 min, incl. one hot-lead alert) | https://drive.google.com/file/d/12yVtt9KG954k7BySYE4-gGRNRklHAjhP/view?usp=drive_link |
 
 ![Workflow canvas](01_Workflow/screenshots/workflow-canvas-1.png)
 

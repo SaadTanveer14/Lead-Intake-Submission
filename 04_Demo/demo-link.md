@@ -1,6 +1,6 @@
 # Demo Recording (3–5 minutes)
 
-- **Video link:** [ADD DEMO VIDEO LINK – Loom / Google Drive]
+- **Video link:** https://drive.google.com/file/d/12yVtt9KG954k7BySYE4-gGRNRklHAjhP/view?usp=drive_link
 
 ## Suggested script
 

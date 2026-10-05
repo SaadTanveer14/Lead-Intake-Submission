@@ -6,7 +6,7 @@
 | 2 | Google Sheet with 8+ test leads (mentor has view access) | `02_Google_Sheet/` | [ ] remove duplicates, [ ] share as Viewer |
 | 3 | Postman collection or curl commands for every test case | `03_Test_Requests/` | Done |
 | 4 | One-page README (what it does, how to call it, fields, setup) | `README.md` | Done |
-| 5 | 3–5 min demo recording incl. one hot-lead alert | `04_Demo/` | [ ] record, [ ] add link |
+| 5 | 3–5 min demo recording incl. one hot-lead alert | `04_Demo/` | Done |
 
 Before submitting:
 
